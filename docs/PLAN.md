@@ -59,24 +59,24 @@ Set up the bare project structure with both servers running and talking to each 
 Implement the first working sport: F1 athlete comparison using the Ergast API (free, no auth).
 
 ### Backend
-- [ ] Create `backend/routers/compare.py`
-- [ ] Create `backend/services/f1.py` with Ergast API integration (`api.jolpi.ca/ergast`)
-- [ ] Implement `GET /api/compare/athletes?sport=f1&a={slug}&b={slug}` endpoint
+- [x] Create `backend/routers/compare.py`
+- [x] Create `backend/services/f1.py` with Ergast API integration (`api.jolpi.ca/ergast`)
+- [x] Implement `GET /api/compare/athletes?sport=f1&a={slug}&b={slug}` endpoint
   - Returns: wins, podiums, poles, fastest laps, championships, total points for each athlete
   - Returns: birth dates for same-age mode
-- [ ] Pre-fetch and save default F1 athletes as JSON in `backend/cache/`:
+- [x] Pre-fetch and save default F1 athletes as JSON in `backend/cache/`:
   - `verstappen.json`, `hamilton.json`, `schumacher.json`
-- [ ] Cache logic: serve from file if exists and younger than 7 days, else re-fetch from Ergast
+- [x] Cache logic: serve from file if exists and younger than 7 days, else re-fetch from Ergast
 
 ### Frontend
-- [ ] Sport selector page: show F1 as the only active option (others greyed out, coming soon)
-- [ ] Athlete selector: two dropdowns pre-populated with default F1 athletes
-- [ ] Comparison card component:
+- [x] Sport selector page: show F1 as the only active option (others greyed out, coming soon)
+- [x] Athlete selector: two dropdowns pre-populated with default F1 athletes
+- [x] Comparison card component:
   - Side-by-side layout, one athlete per column
   - Each stat row: label in center, values on each side
   - Winner value: full opacity + `#ecad0a` highlight
   - Loser value: 35% opacity, same color family
-- [ ] Wire up to `/api/compare/athletes` endpoint
+- [x] Wire up to `/api/compare/athletes` endpoint
 
 ### Tests & Success Criteria
 - `GET /api/compare/athletes?sport=f1&a=hamilton&b=verstappen` returns correct stat structure
