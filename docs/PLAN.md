@@ -27,22 +27,22 @@ Before writing any code, read `docs/agent.md` in full, then confirm the followin
 Set up the bare project structure with both servers running and talking to each other.
 
 ### Backend
-- [ ] Initialize backend with `uv init` inside `backend/`
-- [ ] Add dependencies: `fastapi`, `uvicorn`, `httpx`
-- [ ] Create `backend/main.py` with a single `GET /api/health` endpoint returning `{ "status": "ok" }`
-- [ ] Confirm server starts with `uv run uvicorn main:app --reload --port 8000`
+- [x] Initialize backend with `uv init` inside `backend/`
+- [x] Add dependencies: `fastapi`, `uvicorn`, `httpx`
+- [x] Create `backend/main.py` with a single `GET /api/health` endpoint returning `{ "status": "ok" }`
+- [x] Confirm server starts with `uv run uvicorn main:app --reload --port 8000`
 
 ### Frontend
-- [ ] Initialize frontend with `npm create vite@latest frontend -- --template react`
-- [ ] Install dependencies: `tailwindcss`, `react-router-dom`, `recharts`
-- [ ] Replace default Vite page with a minimal placeholder: "Smart Compare" heading, brand colors applied
-- [ ] Add a health check call to `/api/health` on load — display "Backend connected" or "Backend unavailable"
-- [ ] Configure Vite proxy: `/api` → `http://localhost:8000`
+- [x] Initialize frontend with `npm create vite@latest frontend -- --template react`
+- [x] Install dependencies: `tailwindcss`, `react-router-dom`, `recharts`
+- [x] Replace default Vite page with a minimal placeholder: "Smart Compare" heading, brand colors applied
+- [x] Add a health check call to `/api/health` on load — display "Backend connected" or "Backend unavailable"
+- [x] Configure Vite proxy: `/api` → `http://localhost:8000`
 
 ### Scripts
-- [ ] `scripts/start.sh` — starts both backend and frontend in parallel (Mac/Linux)
-- [ ] `scripts/stop.sh` — kills both processes
-- [ ] `scripts/start.bat` — Windows equivalent
+- [x] `scripts/start.sh` — starts both backend and frontend in parallel (Mac/Linux)
+- [x] `scripts/stop.sh` — kills both processes
+- [x] `scripts/start.bat` — Windows equivalent
 
 ### Tests & Success Criteria
 - `GET /api/health` returns 200 with `{ "status": "ok" }`
