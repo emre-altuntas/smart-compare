@@ -1,0 +1,27 @@
+HAMILTON:
+  name: Lewis Hamilton
+  birth_date: 1985-01-07
+  wins: 105
+  podiums: 203
+  poles: 117
+  fastest_laps: 68
+  championships: 7
+  total_points: 815.0
+SCHUMACHER:
+  name: Michael Schumacher
+  birth_date: 1969-01-03
+  wins: 91
+  podiums: 155
+  poles: 36
+  fastest_laps: 21
+  championships: 7
+  total_points: 430.0
+VERSTAPPEN:
+  name: Max Verstappen
+  birth_date: 1997-09-30
+  wins: 71
+  podiums: 127
+  poles: 62
+  fastest_laps: 37
+  championships: 4
+  total_points: 905.0

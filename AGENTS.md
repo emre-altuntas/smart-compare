@@ -5,20 +5,19 @@
 This project is building a smart compare web app. Key features:
 
 - A user can choose a category such as sports to compare teams and famous athletes related to the chosen sport.
-- When comparing athletes, there should be an option for "same-age stats": when selected, both athletes' stats are shown as of the younger athlete's current age.
 - Stats should cover the most important metrics — for F1: podiums, poles, wins, fastest laps, championships, and total points.
 - If one athlete leads in certain stats (e.g. podiums and poles), those winning stats should appear visually prominent, while the stats they trail in should appear faded.
+- The UI should support both Morning and Night modes, with a simple user toggle and consistent brand styling in both modes.
 
 ## Default Data Strategy
 
-- On first load, fetch real data from public APIs or scrape Wikipedia/stathead
-  for a curated set of default entities so the app works out of the box.
+- On first load, use curated hardcoded local JSON data so the app works out of the box.
 - Default comparisons to pre-load:
   - F1: Max Verstappen, Lewis Hamilton, Michael Schumacher
   - Football: Real Madrid vs Barcelona (club), Lionel Messi vs Cristiano Ronaldo (player)
   - Basketball: LeBron James vs Michael Jordan
-- Cache fetched data locally (JSON file in backend) to avoid repeat fetches.
-- Data sources to research at build time: Ergast API (F1), FBref / Transfermarkt (football), Basketball-Reference (NBA).
+- Keep data local in JSON files under backend for reliability and offline-first local development.
+- No live sports API dependency is required for current scope.
 
 ## Limitations
 
@@ -33,8 +32,6 @@ This project is building a smart compare web app. Key features:
 ### Backend
 - Python 3.13
 - FastAPI (REST API)
-- httpx (async HTTP calls)
-- BeautifulSoup4 (scraping fallback)
 - uv (package manager)
 
 ### No Docker, No Auth, No Database
@@ -47,13 +44,17 @@ This project is building a smart compare web app. Key features:
 
 ## Color Scheme
 
--Accent Yellow: #ecad0a   → only "winner" stat highlight
--Winner Glow:   #ecad0a + opacity 100%
--Loser Fade:    same color with winner + opacity 35% (not gray, pale version)
--Blue Primary:  #209dd7   → navigation, links, card border
--Purple:        #753991   → CTA buttons (unchangeable)
--Dark Navy:     #032147   → heading, dark background
--Muted Gray:    #888888   → label, secondary text
+-Blue Primary:       #209dd7   → navigation, links, card border
+-Purple Secondary:   #753991   → CTA buttons
+-Morning Sky:        #eef7fc   → morning page background
+-Morning Card:       #ffffff   → morning card surface
+-Night Background:   #0b1624   → night page background
+-Night Surface:      #152334   → night cards and inputs
+-Night Border:       #4a5f77   → night borders/dividers
+-Night Text:         #dbe4ee   → comfortable night text (not pure white)
+-Night Winner:       #7fc8ff   → winner highlight in night mode (no yellow)
+-Morning Winner:     #ecad0a   → winner highlight in morning mode
+-Muted Gray:         #888888   → label, secondary text
 
 ## Coding standards
 
