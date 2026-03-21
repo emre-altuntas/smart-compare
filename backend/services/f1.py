@@ -138,3 +138,13 @@ async def get_f1_athlete(slug):
             json.dump(data, f)
             
     return data
+
+
+F1_STATS = [
+    {"key": "wins", "label": "Wins"},
+    {"key": "podiums", "label": "Podiums"},
+    {"key": "poles", "label": "Poles"},
+    {"key": "fastest_laps", "label": "Fastest Laps"},
+    {"key": "total_points", "label": "Total Points", "adjusted_key": "adjusted_total_points"},
+    {"key": "championships", "label": "Championships"},
+]

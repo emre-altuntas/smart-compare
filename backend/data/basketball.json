@@ -1,0 +1,116 @@
+[
+  {
+    "slug": "lebron-james",
+    "name": "LeBron James",
+    "seasons": [
+      {
+        "season": "2003-04",
+        "points_per_game": 20.9,
+        "total_points": 1654,
+        "rebounds": 432,
+        "assists": 465
+      },
+      {
+        "season": "2008-09",
+        "points_per_game": 28.4,
+        "total_points": 2304,
+        "rebounds": 613,
+        "assists": 587
+      },
+      {
+        "season": "2012-13",
+        "points_per_game": 26.8,
+        "total_points": 2036,
+        "rebounds": 610,
+        "assists": 551
+      },
+      {
+        "season": "2015-16",
+        "points_per_game": 25.3,
+        "total_points": 1920,
+        "rebounds": 565,
+        "assists": 514
+      },
+      {
+        "season": "2019-20",
+        "points_per_game": 25.3,
+        "total_points": 1698,
+        "rebounds": 525,
+        "assists": 684
+      },
+      {
+        "season": "2023-24",
+        "points_per_game": 25.7,
+        "total_points": 1822,
+        "rebounds": 523,
+        "assists": 627
+      }
+    ],
+    "career": {
+      "points_per_game": 27.0,
+      "total_points": 41924,
+      "rebounds": 11765,
+      "assists": 11584,
+      "championships": 4,
+      "mvps": 4,
+      "all_star_selections": 21
+    }
+  },
+  {
+    "slug": "michael-jordan",
+    "name": "Michael Jordan",
+    "seasons": [
+      {
+        "season": "1984-85",
+        "points_per_game": 28.2,
+        "total_points": 2313,
+        "rebounds": 534,
+        "assists": 481
+      },
+      {
+        "season": "1987-88",
+        "points_per_game": 35.0,
+        "total_points": 2868,
+        "rebounds": 449,
+        "assists": 485
+      },
+      {
+        "season": "1990-91",
+        "points_per_game": 31.5,
+        "total_points": 2580,
+        "rebounds": 492,
+        "assists": 453
+      },
+      {
+        "season": "1995-96",
+        "points_per_game": 30.4,
+        "total_points": 2491,
+        "rebounds": 527,
+        "assists": 352
+      },
+      {
+        "season": "1997-98",
+        "points_per_game": 28.7,
+        "total_points": 2357,
+        "rebounds": 428,
+        "assists": 283
+      },
+      {
+        "season": "2002-03",
+        "points_per_game": 20.0,
+        "total_points": 1640,
+        "rebounds": 507,
+        "assists": 311
+      }
+    ],
+    "career": {
+      "points_per_game": 30.1,
+      "total_points": 32292,
+      "rebounds": 6672,
+      "assists": 5633,
+      "championships": 6,
+      "mvps": 5,
+      "all_star_selections": 14
+    }
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "real-madrid",
+    "name": "Real Madrid",
+    "stats": {
+      "league_titles": 36,
+      "champions_league_titles": 15,
+      "domestic_cups": 20,
+      "all_time_wins": 5400
+    }
+  },
+  {
+    "slug": "barcelona",
+    "name": "Barcelona",
+    "stats": {
+      "league_titles": 27,
+      "champions_league_titles": 5,
+      "domestic_cups": 31,
+      "all_time_wins": 5050
+    }
+  }
+]

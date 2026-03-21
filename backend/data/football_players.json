@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "messi",
+    "name": "Lionel Messi",
+    "stats": {
+      "goals": 821,
+      "assists": 361,
+      "appearances": 1048,
+      "ballon_dor_wins": 8,
+      "hat_tricks": 59,
+      "trophies": 46
+    }
+  },
+  {
+    "slug": "ronaldo",
+    "name": "Cristiano Ronaldo",
+    "stats": {
+      "goals": 938,
+      "assists": 257,
+      "appearances": 1281,
+      "ballon_dor_wins": 5,
+      "hat_tricks": 66,
+      "trophies": 35
+    }
+  }
+]

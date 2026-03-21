@@ -99,30 +99,30 @@ Expand to two more sports. No external APIs or scraping — all data is pre-buil
 ---
 
 ### Data Files
-- [ ] Create `backend/data/` directory for static data files (never re-fetched, not cache)
-- [ ] Create `backend/data/football_players.json` with realistic career stats for Messi and Ronaldo
+- [x] Create `backend/data/` directory for static data files (never re-fetched, not cache)
+- [x] Create `backend/data/football_players.json` with realistic career stats for Messi and Ronaldo
   - Stats: goals, assists, appearances, Ballon d'Or wins, hat-tricks, trophies
-- [ ] Create `backend/data/football_teams.json` with stats for Real Madrid and Barcelona
+- [x] Create `backend/data/football_teams.json` with stats for Real Madrid and Barcelona
   - Stats: league titles, Champions League titles, domestic cups, all-time wins
-- [ ] Create `backend/data/basketball.json` with season-by-season stats for LeBron James and Michael Jordan
+- [x] Create `backend/data/basketball.json` with season-by-season stats for LeBron James and Michael Jordan
   - Stats: points per game, total points, rebounds, assists, championships, MVPs, All-Star selections
 
 ### Backend
-- [ ] Wire football player data to `/api/compare/athletes?sport=football`
-- [ ] Wire football team data to `/api/compare/teams?sport=football&a={slug}&b={slug}`
-- [ ] Wire basketball data to `/api/compare/athletes?sport=basketball`
+- [x] Wire football player data to `/api/compare/athletes?sport=football`
+- [x] Wire football team data to `/api/compare/teams?sport=football&a={slug}&b={slug}`
+- [x] Wire basketball data to `/api/compare/athletes?sport=basketball`
 
 ### Frontend
-- [ ] Enable Football and Basketball in sport selector
-- [ ] Add entity type toggle: "Athletes" / "Teams" (only Football has teams)
+- [x] Enable Football and Basketball in sport selector
+- [x] Add entity type toggle: "Athletes" / "Teams" (only Football has teams)
 - [ ] Reuse comparison card — stat rows adapt per sport
-- [ ] Default entities pre-selected when sport changes
+- [x] Default entities pre-selected when sport changes
 
 ### Tests & Success Criteria
-- All three sports return valid comparison data
-- Team comparison works for football
-- No external API calls made for football or basketball
-- Switching sports resets selections cleanly
+- [x] All three sports return valid comparison data
+- [x] Team comparison works for football
+- [x] No external API calls made for football or basketball
+- [x] Switching sports resets selections cleanly
 
 **Stop here. Demo all sports and wait for approval.**
 

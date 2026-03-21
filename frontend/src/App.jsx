@@ -1,61 +1,148 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './index.css'
 
 const SPORTS = [
-  { id: 'football', name: 'Football', active: false },
-  { id: 'basketball', name: 'Basketball', active: false },
-  { id: 'f1', name: 'Formula 1', active: true },
+  { id: 'f1', name: 'Formula 1', entityTypes: ['athletes'] },
+  { id: 'football', name: 'Football', entityTypes: ['athletes', 'teams'] },
+  { id: 'basketball', name: 'Basketball', entityTypes: ['athletes'] },
 ]
 
-const F1_ATHLETES = [
-  { id: 'verstappen', name: 'Max Verstappen' },
-  { id: 'hamilton', name: 'Lewis Hamilton' },
-  { id: 'schumacher', name: 'Michael Schumacher' },
+const ENTITY_TYPE_OPTIONS = [
+  { id: 'athletes', name: 'Athletes' },
+  { id: 'teams', name: 'Teams' },
 ]
+
+const ENTITY_OPTIONS = {
+  f1: {
+    athletes: [
+      { id: 'verstappen', name: 'Max Verstappen' },
+      { id: 'hamilton', name: 'Lewis Hamilton' },
+      { id: 'schumacher', name: 'Michael Schumacher' },
+    ],
+  },
+  football: {
+    athletes: [
+      { id: 'messi', name: 'Lionel Messi' },
+      { id: 'ronaldo', name: 'Cristiano Ronaldo' },
+    ],
+    teams: [
+      { id: 'real-madrid', name: 'Real Madrid' },
+      { id: 'barcelona', name: 'Barcelona' },
+    ],
+  },
+  basketball: {
+    athletes: [
+      { id: 'lebron-james', name: 'LeBron James' },
+      { id: 'michael-jordan', name: 'Michael Jordan' },
+    ],
+  },
+}
+
+const DEFAULT_SELECTIONS = {
+  f1: { entityType: 'athletes', a: 'verstappen', b: 'hamilton' },
+  football: {
+    athletes: { a: 'messi', b: 'ronaldo' },
+    teams: { a: 'real-madrid', b: 'barcelona' },
+  },
+  basketball: { entityType: 'athletes', a: 'lebron-james', b: 'michael-jordan' },
+}
+
+function splitDisplayName(name) {
+  return name.split(' ').map((part, index) => <div key={`${name}-${index}`}>{part}</div>)
+}
+
+function formatStatValue(value) {
+  if (typeof value === 'number' && !Number.isInteger(value)) {
+    return value.toFixed(1)
+  }
+
+  return `${value}`
+}
 
 function CustomSelect({ options, value, onChange, label, focusColor, disabledOptionIds = [], mode }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  
-  const selectedOption = options.find(o => o.id === value);
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  const selectedOption = options.find((option) => option.id === value)
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <div className="relative group w-full" ref={dropdownRef}>
-      <label className={`block text-xs sm:text-sm uppercase tracking-[0.2em] font-black mb-3 ml-2 transition-colors ${mode === 'night' ? 'text-gray-text' : 'text-[#5b6a7e]'} ${focusColor === 'blue' ? 'group-hover:text-blue-primary' : 'group-hover:text-purple-secondary'}`}>
+      <label
+        className={`block text-xs sm:text-sm uppercase tracking-[0.2em] font-black mb-3 ml-2 transition-colors ${
+          mode === 'night' ? 'text-gray-text' : 'text-[#5b6a7e]'
+        } ${focusColor === 'blue' ? 'group-hover:text-blue-primary' : 'group-hover:text-purple-secondary'}`}
+      >
         {label}
       </label>
-      <div 
-        className={`w-full p-5 sm:p-6 rounded-[1.5rem] font-black text-xl sm:text-3xl transition-all cursor-pointer backdrop-blur-2xl shadow-2xl flex justify-between items-center ${mode === 'night' ? 'bg-[#152334]/85 border border-[#4a5f77] text-[#dbe4ee] hover:border-[#6f87a3]' : 'bg-white/80 border border-[#c5d8e8] text-[#032147] hover:border-[#7fb8d6]'} ${isOpen ? `ring-4 ${focusColor === 'blue' ? 'border-blue-primary ring-blue-primary/30' : 'border-purple-secondary ring-purple-secondary/30'}` : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
+      <div
+        className={`w-full p-5 sm:p-6 rounded-[1.5rem] font-black text-xl sm:text-3xl transition-all cursor-pointer backdrop-blur-2xl shadow-2xl flex justify-between items-center ${
+          mode === 'night'
+            ? 'bg-night-surface/85 border border-night-border text-night-text hover:border-[#6f87a3]'
+            : 'bg-morning-card/80 border border-[#c5d8e8] text-[#032147] hover:border-[#7fb8d6]'
+        } ${
+          isOpen
+            ? `ring-4 ${focusColor === 'blue' ? 'border-blue-primary ring-blue-primary/30' : 'border-purple-secondary ring-purple-secondary/30'}`
+            : ''
+        }`}
+        onClick={() => setIsOpen((open) => !open)}
       >
         <span className="drop-shadow-lg">{selectedOption?.name}</span>
-        <svg className={`w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-500 ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${isOpen ? 'rotate-180' : ''} ${focusColor === 'blue' ? 'text-blue-primary' : 'text-purple-secondary'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        <svg
+          className={`w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-500 ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
+            isOpen ? 'rotate-180' : ''
+          } ${focusColor === 'blue' ? 'text-blue-primary' : 'text-purple-secondary'}`}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
       </div>
-      
+
       {isOpen && (
-        <div className={`absolute z-50 w-full mt-3 rounded-[1.5rem] shadow-[0_40px_80px_rgba(0,0,0,0.35)] backdrop-blur-3xl overflow-hidden py-2 animate-in fade-in slide-in-from-top-4 duration-300 ${mode === 'night' ? 'bg-[#152334]/95 border border-[#4a5f77]' : 'bg-white/95 border border-[#c5d8e8]'}`}>
-          {options.map(option => (
+        <div
+          className={`absolute z-50 w-full mt-3 rounded-[1.5rem] shadow-[0_40px_80px_rgba(0,0,0,0.35)] backdrop-blur-3xl overflow-hidden py-2 animate-in fade-in slide-in-from-top-4 duration-300 ${
+            mode === 'night' ? 'bg-night-surface/95 border border-night-border' : 'bg-morning-card/95 border border-[#c5d8e8]'
+          }`}
+        >
+          {options.map((option) => (
             <div
               key={option.id}
               className={`px-6 py-4 text-xl sm:text-2xl font-black transition-colors border-b border-white/5 last:border-0 ${
                 disabledOptionIds.includes(option.id)
                   ? 'text-gray-600/40 cursor-not-allowed'
-                  : `cursor-pointer hover:pl-8 ${value === option.id ? (focusColor === 'blue' ? 'bg-blue-primary/30 text-white' : 'bg-purple-secondary/30 text-white') : mode === 'night' ? 'text-[#9aaec3] hover:bg-[#263b55] hover:text-[#dbe4ee]' : 'text-[#36506d] hover:bg-[#e8f2f8] hover:text-[#032147]'}`
+                  : `cursor-pointer hover:pl-8 ${
+                      value === option.id
+                        ? focusColor === 'blue'
+                          ? 'bg-blue-primary/30 text-white'
+                          : 'bg-purple-secondary/30 text-white'
+                        : mode === 'night'
+                          ? 'text-[#9aaec3] hover:bg-[#263b55] hover:text-night-text'
+                          : 'text-[#36506d] hover:bg-[#e8f2f8] hover:text-[#032147]'
+                    }`
               }`}
               onClick={() => {
-                if (disabledOptionIds.includes(option.id)) return;
-                onChange(option.id);
-                setIsOpen(false);
+                if (disabledOptionIds.includes(option.id)) {
+                  return
+                }
+
+                onChange(option.id)
+                setIsOpen(false)
               }}
             >
               {option.name}
@@ -63,6 +150,35 @@ function CustomSelect({ options, value, onChange, label, focusColor, disabledOpt
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+function SegmentedToggle({ options, value, onChange, mode, className = '' }) {
+  return (
+    <div
+      className={`inline-flex p-2 rounded-[1.2rem] border shadow-[0_0_50px_rgba(0,0,0,0.2)] backdrop-blur-2xl ${
+        mode === 'night' ? 'bg-[#1a2a3d]/80 border-night-border' : 'bg-morning-card/65 border-[#c5d8e8]'
+      } ${className}`}
+    >
+      {options.map((option) => (
+        <button
+          key={option.id}
+          type="button"
+          onClick={() => onChange(option.id)}
+          className={`relative px-5 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-black tracking-[0.15em] uppercase rounded-xl transition-all duration-500 overflow-hidden ${
+            value === option.id
+              ? mode === 'night'
+                ? 'text-night-text shadow-[0_20px_50px_rgba(141,198,255,0.35)] bg-[#2f4f73] z-10'
+                : 'text-white shadow-[0_20px_50px_rgba(32,157,215,0.4)] bg-blue-primary z-10'
+              : mode === 'night'
+                ? 'text-[#95a5b8] hover:text-night-text hover:bg-[#263b55]'
+                : 'text-[#5b6a7e] hover:text-[#032147] hover:bg-[#e8f2f8]'
+          }`}
+        >
+          {option.name}
+        </button>
+      ))}
     </div>
   )
 }
@@ -80,94 +196,167 @@ function PointsLabel({ mode, pointsView, onToggle }) {
         aria-label={isAdjusted ? 'Show raw total points' : 'Show adjusted total points'}
         aria-pressed={isAdjusted}
         onClick={onToggle}
-        className={`relative h-5 w-9 sm:h-6 sm:w-10 shrink-0 rounded-full border transition-all duration-300 ${isAdjusted ? 'bg-blue-primary border-blue-primary' : mode === 'night' ? 'bg-[#203244] border-[#4a5f77]' : 'bg-[#d8e7f2] border-[#b9d3e3]'}`}
+        className={`relative h-5 w-9 sm:h-6 sm:w-10 shrink-0 rounded-full border transition-all duration-300 ${
+          isAdjusted
+            ? 'bg-blue-primary border-blue-primary'
+            : mode === 'night'
+              ? 'bg-[#203244] border-night-border'
+              : 'bg-[#d8e7f2] border-[#b9d3e3]'
+        }`}
       >
         <span
-          className={`absolute top-[1px] left-[1px] h-4 w-4 sm:h-[18px] sm:w-[18px] rounded-full bg-white shadow-[0_4px_12px_rgba(3,33,71,0.22)] transition-transform duration-300 ${isAdjusted ? 'translate-x-4 sm:translate-x-[1.05rem]' : 'translate-x-0'}`}
+          className={`absolute top-[1px] left-[1px] h-4 w-4 sm:h-[18px] sm:w-[18px] rounded-full bg-white shadow-[0_4px_12px_rgba(3,33,71,0.22)] transition-transform duration-300 ${
+            isAdjusted ? 'translate-x-4 sm:translate-x-[1.05rem]' : 'translate-x-0'
+          }`}
         />
       </button>
     </div>
   )
 }
 
-function StatRow({ label, valA, valB, mode, pointsView = 'raw', onPointsToggle = null, sideWidthClass = 'w-2/5', centerWidthClass = 'w-1/5' }) {
-  const numA = parseFloat(valA) || 0
-  const numB = parseFloat(valB) || 0
+function StatRow({
+  label,
+  valA,
+  valB,
+  mode,
+  pointsView = 'raw',
+  onPointsToggle = null,
+  sideWidthClass = 'w-2/5',
+  centerWidthClass = 'w-1/5',
+}) {
+  const numA = Number(valA) || 0
+  const numB = Number(valB) || 0
   const winA = numA > numB
   const winB = numB > numA
-  const winnerClass = mode === 'night'
-    ? 'text-[#7fc8ff] opacity-100 drop-shadow-[0_0_16px_rgba(127,200,255,0.45)] scale-[1.02]'
-    : 'text-[#3f8fd0] opacity-100 drop-shadow-[0_0_20px_rgba(63,143,208,0.35)] scale-[1.02]'
-  const loserClass = mode === 'night' ? 'text-[#7fc8ff]/35 scale-95' : 'text-[#3f8fd0]/35 scale-95'
+  const tieClass = mode === 'night' ? 'text-night-text opacity-90' : 'text-[#24405f] opacity-90'
+  const winnerClass =
+    mode === 'night'
+      ? 'text-night-winner opacity-100 drop-shadow-[0_0_16px_rgba(127,200,255,0.45)] scale-[1.02]'
+      : 'text-morning-winner opacity-100 drop-shadow-[0_0_20px_rgba(63,143,208,0.35)] scale-[1.02]'
+  const loserClass = mode === 'night' ? 'text-night-winner/35 scale-95' : 'text-morning-winner/35 scale-95'
 
   return (
-    <div className={`flex justify-between items-center py-3 sm:py-4 border-b last:border-0 transition-colors rounded-xl px-2 sm:px-5 -mx-2 sm:-mx-5 group ${mode === 'night' ? 'border-white/10 hover:bg-white/[0.03]' : 'border-[#d8e6f1] hover:bg-[#f4f9fc]'}`}>
-      <div className={`${sideWidthClass} text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${winA ? winnerClass : loserClass}`}>
-        {valA}
+    <div
+      className={`flex justify-between items-center py-3 sm:py-4 border-b last:border-0 transition-colors rounded-xl px-2 sm:px-5 -mx-2 sm:-mx-5 group ${
+        mode === 'night' ? 'border-white/10 hover:bg-white/[0.03]' : 'border-[#d8e6f1] hover:bg-[#f4f9fc]'
+      }`}
+    >
+      <div
+        className={`${sideWidthClass} text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${
+          winA ? winnerClass : winB ? loserClass : tieClass
+        }`}
+      >
+        {formatStatValue(valA)}
       </div>
       <div className={`${centerWidthClass} flex items-center justify-center`}>
-        <div className={`relative flex items-center justify-center gap-1 text-center text-[9px] sm:text-[10px] lg:text-xs font-black tracking-[0.12em] sm:tracking-[0.2em] uppercase transition-colors leading-tight ${mode === 'night' ? 'text-[#8ea1b6] group-hover:text-[#dbe4ee]' : 'text-[#6e7f95] group-hover:text-[#032147]'}`}>
+        <div
+          className={`relative flex items-center justify-center gap-1 text-center text-[9px] sm:text-[10px] lg:text-xs font-black tracking-[0.12em] sm:tracking-[0.2em] uppercase transition-colors leading-tight ${
+            mode === 'night' ? 'text-[#8ea1b6] group-hover:text-night-text' : 'text-[#6e7f95] group-hover:text-[#032147]'
+          }`}
+        >
           {onPointsToggle ? <PointsLabel mode={mode} pointsView={pointsView} onToggle={onPointsToggle} /> : label}
         </div>
       </div>
-      <div className={`${sideWidthClass} text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${winB ? winnerClass : loserClass}`}>
-        {valB}
+      <div
+        className={`${sideWidthClass} text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${
+          winB ? winnerClass : winA ? loserClass : tieClass
+        }`}
+      >
+        {formatStatValue(valB)}
       </div>
     </div>
   )
 }
 
 function ComparisonCard({ data, mode, pointsView, onPointsViewChange }) {
-  if (!data || !data.a || !data.b) return null;
-  const { a, b } = data;
-  const pointKey = pointsView === 'adjusted' ? 'adjusted_total_points' : 'total_points'
+  if (!data?.a || !data?.b) {
+    return null
+  }
+
+  const { a, b, stats, sport } = data
 
   return (
-    <div className={`w-full max-w-5xl mx-auto rounded-[1.5rem] sm:rounded-[2rem] border p-4 sm:p-6 lg:p-8 shadow-[0_0_80px_-30px_rgba(32,157,215,0.25)] backdrop-blur-3xl mt-6 relative overflow-hidden ${mode === 'night' ? 'border-[#4a5f77] bg-[#152334]/85' : 'border-[#8dc4df] bg-white/75'}`}>
-      
-      <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] blur-[150px] rounded-[100%] pointer-events-none ${mode === 'night' ? 'bg-blue-primary/10' : 'bg-blue-primary/20'}`}></div>
-      
-      <div className={`flex flex-col xl:flex-row justify-between mb-5 xl:mb-6 items-center gap-3 xl:gap-0 pb-5 xl:pb-6 border-b relative z-10 w-full ${mode === 'night' ? 'border-[#4a5f77]' : 'border-[#c8deed]'}`}>
-        <h2 className={`w-full xl:w-[45%] text-center text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight drop-shadow-2xl leading-none ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#032147]'}`}>{a.name.split(' ').map((n, i) => <div key={i}>{n}</div>)}</h2>
-        
+    <div
+      className={`w-full max-w-5xl mx-auto rounded-[1.5rem] sm:rounded-[2rem] border p-4 sm:p-6 lg:p-8 shadow-[0_0_80px_-30px_rgba(32,157,215,0.25)] backdrop-blur-3xl mt-6 relative overflow-hidden ${
+        mode === 'night' ? 'border-night-border bg-night-surface/85' : 'border-[#8dc4df] bg-morning-card/75'
+      }`}
+    >
+      <div
+        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] blur-[150px] rounded-[100%] pointer-events-none ${
+          mode === 'night' ? 'bg-blue-primary/10' : 'bg-blue-primary/20'
+        }`}
+      />
+
+      <div
+        className={`flex flex-col xl:flex-row justify-between mb-5 xl:mb-6 items-center gap-3 xl:gap-0 pb-5 xl:pb-6 border-b relative z-10 w-full ${
+          mode === 'night' ? 'border-night-border' : 'border-[#c8deed]'
+        }`}
+      >
+        <h2 className={`w-full xl:w-[45%] text-center text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight drop-shadow-2xl leading-none ${mode === 'night' ? 'text-night-text' : 'text-[#032147]'}`}>
+          {splitDisplayName(a.name)}
+        </h2>
+
         <div className="w-full xl:w-[10%] flex items-center justify-center my-2 xl:my-0">
-           <span className={`font-black italic text-4xl sm:text-5xl tracking-tighter select-none ${mode === 'night' ? 'text-[#7f93a8]/40' : 'text-[#8ab3ce]'}`}>VS</span>
+          <span className={`font-black italic text-4xl sm:text-5xl tracking-tighter select-none ${mode === 'night' ? 'text-[#7f93a8]/40' : 'text-[#8ab3ce]'}`}>
+            VS
+          </span>
         </div>
-        
-        <h2 className={`w-full xl:w-[45%] text-center text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight drop-shadow-2xl leading-none ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#032147]'}`}>{b.name.split(' ').map((n, i) => <div key={i}>{n}</div>)}</h2>
+
+        <h2 className={`w-full xl:w-[45%] text-center text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight drop-shadow-2xl leading-none ${mode === 'night' ? 'text-night-text' : 'text-[#032147]'}`}>
+          {splitDisplayName(b.name)}
+        </h2>
       </div>
-      
+
       <div className="flex flex-col gap-1.5 sm:gap-2 relative z-10">
-        <StatRow label="Wins" valA={a.wins} valB={b.wins} mode={mode} />
-        <StatRow label="Podiums" valA={a.podiums} valB={b.podiums} mode={mode} />
-        <StatRow label="Poles" valA={a.poles} valB={b.poles} mode={mode} />
-        <StatRow label="Fastest Laps" valA={a.fastest_laps} valB={b.fastest_laps} mode={mode} />
-        <StatRow
-          label="Total Points"
-          valA={a[pointKey]}
-          valB={b[pointKey]}
-          mode={mode}
-          pointsView={pointsView}
-          onPointsToggle={() => onPointsViewChange(pointsView === 'adjusted' ? 'raw' : 'adjusted')}
-          sideWidthClass="w-[35%] sm:w-[38%]"
-          centerWidthClass="w-[30%] sm:w-[24%]"
-        />
-        <StatRow label="Championships" valA={a.championships} valB={b.championships} mode={mode} />
+        {stats.map((stat) => {
+          const isF1Points = sport === 'f1' && stat.key === 'total_points'
+          const valueKey = isF1Points && pointsView === 'adjusted' ? stat.adjusted_key : stat.key
+
+          return (
+            <StatRow
+              key={stat.key}
+              label={stat.label}
+              valA={a.values[valueKey]}
+              valB={b.values[valueKey]}
+              mode={mode}
+              pointsView={pointsView}
+              onPointsToggle={
+                isF1Points
+                  ? () => onPointsViewChange(pointsView === 'adjusted' ? 'raw' : 'adjusted')
+                  : null
+              }
+              sideWidthClass={isF1Points ? 'w-[35%] sm:w-[38%]' : 'w-2/5'}
+              centerWidthClass={isF1Points ? 'w-[30%] sm:w-[24%]' : 'w-1/5'}
+            />
+          )
+        })}
       </div>
     </div>
   )
 }
 
+function resolveDefaultSelection(nextSport, nextEntityType) {
+  if (nextSport === 'football') {
+    return DEFAULT_SELECTIONS.football[nextEntityType]
+  }
+
+  return DEFAULT_SELECTIONS[nextSport]
+}
+
 function App() {
   const [sport, setSport] = useState('f1')
-  const [athleteA, setAthleteA] = useState('verstappen')
-  const [athleteB, setAthleteB] = useState('schumacher')
+  const [entityType, setEntityType] = useState('athletes')
+  const [entityA, setEntityA] = useState(DEFAULT_SELECTIONS.f1.a)
+  const [entityB, setEntityB] = useState(DEFAULT_SELECTIONS.f1.b)
   const [mode, setMode] = useState('night')
   const [pointsView, setPointsView] = useState('raw')
-  
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
-  
+
+  const selectedSport = SPORTS.find((entry) => entry.id === sport)
+  const availableEntityTypes = selectedSport.entityTypes
+  const selectorOptions = ENTITY_OPTIONS[sport][entityType]
+
   useEffect(() => {
     const savedMode = window.localStorage.getItem('smartcompare-mode')
     if (savedMode === 'morning' || savedMode === 'night') {
@@ -180,32 +369,63 @@ function App() {
   }, [mode])
 
   useEffect(() => {
-    if (!sport || !athleteA || !athleteB) return;
+    if (!availableEntityTypes.includes(entityType)) {
+      setEntityType(availableEntityTypes[0])
+      return
+    }
+
+    const defaults = resolveDefaultSelection(sport, entityType)
+    setEntityA(defaults.a)
+    setEntityB(defaults.b)
+    setPointsView('raw')
+  }, [sport, entityType, availableEntityTypes])
+
+  useEffect(() => {
+    if (!sport || !entityType || !entityA || !entityB) {
+      return
+    }
+
+    const endpoint = entityType === 'teams' ? 'teams' : 'athletes'
     setLoading(true)
-    fetch(`/api/compare/athletes?sport=${sport}&a=${athleteA}&b=${athleteB}`)
-      .then(res => res.json())
-      .then(json => {
-        if (!json.detail) setData(json)
-        else setData(null)
+
+    fetch(`/api/compare/${endpoint}?sport=${sport}&a=${entityA}&b=${entityB}`)
+      .then(async (response) => {
+        const json = await response.json()
+        if (!response.ok || json.detail) {
+          throw new Error(json.detail || 'Failed to load comparison data')
+        }
+        return json
+      })
+      .then((json) => {
+        setData(json)
+      })
+      .catch((error) => {
+        console.error(error)
+        setData(null)
+      })
+      .finally(() => {
         setLoading(false)
       })
-      .catch((e) => {
-        console.error(e)
-        setLoading(false)
-      })
-  }, [sport, athleteA, athleteB])
+  }, [sport, entityType, entityA, entityB])
 
   return (
-    <div className={`min-h-screen py-6 sm:py-8 px-4 sm:px-6 lg:px-10 font-sans antialiased selection:bg-blue-primary/30 relative overflow-hidden transition-colors duration-500 ${mode === 'night' ? 'text-[#dbe4ee] bg-[#0b1624]' : 'text-[#032147] bg-[#eef7fc]'}`}>
-      {/* Background ambient lighting */}
-      <div className={`fixed top-[-20%] left-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#365b85]/25' : 'bg-blue-primary/20'}`}></div>
-      <div className={`fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#5f4c78]/25' : 'bg-[#7aa8cc]/25'}`}></div>
+    <div
+      className={`min-h-screen py-6 sm:py-8 px-4 sm:px-6 lg:px-10 font-sans antialiased selection:bg-blue-primary/30 relative overflow-hidden transition-colors duration-500 ${
+        mode === 'night' ? 'text-night-text bg-night-background' : 'text-[#032147] bg-morning-sky'
+      }`}
+    >
+      <div className={`fixed top-[-20%] left-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#365b85]/25' : 'bg-blue-primary/20'}`} />
+      <div className={`fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#5f4c78]/25' : 'bg-morning-accent/25'}`} />
 
       <button
         type="button"
         aria-label={mode === 'night' ? 'Switch to morning mode' : 'Switch to night mode'}
         onClick={() => setMode(mode === 'night' ? 'morning' : 'night')}
-        className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-50 h-10 w-10 sm:h-11 sm:w-11 rounded-full border flex items-center justify-center transition-colors ${mode === 'night' ? 'border-[#6f87a3] bg-[#152334] text-[#dbe4ee] hover:bg-[#1c2f45]' : 'border-[#b4d1e4] bg-white/85 text-[#032147] hover:bg-white'}`}
+        className={`fixed top-4 right-4 sm:top-6 sm:right-6 z-50 h-10 w-10 sm:h-11 sm:w-11 rounded-full border flex items-center justify-center transition-colors ${
+          mode === 'night'
+            ? 'border-[#6f87a3] bg-night-surface text-night-text hover:bg-[#1c2f45]'
+            : 'border-[#b4d1e4] bg-morning-card/85 text-[#032147] hover:bg-morning-card'
+        }`}
       >
         {mode === 'night' ? (
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -232,73 +452,64 @@ function App() {
             <span className={`bg-gradient-to-r bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(32,157,215,0.28)] ${mode === 'night' ? 'from-[#c8d7e8] via-[#8db8dd] to-[#9caec1]' : 'from-[#24405f] via-[#2e709f] to-[#4f83ad]'}`}>
               SMART
             </span>
-            <span className={`ml-2 sm:ml-3 ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#24405f]'}`}>COMPARE</span>
+            <span className={`ml-2 sm:ml-3 ${mode === 'night' ? 'text-night-text' : 'text-[#24405f]'}`}>COMPARE</span>
           </h1>
-          <p className={`text-xs sm:text-sm font-black tracking-[0.18em] uppercase opacity-80 ${mode === 'night' ? 'text-[#95a5b8]' : 'text-[#60758e]'}`}>Data Driven <span className="text-purple-secondary">Glory</span></p>
+          <p className={`text-xs sm:text-sm font-black tracking-[0.18em] uppercase opacity-80 ${mode === 'night' ? 'text-[#95a5b8]' : 'text-[#60758e]'}`}>
+            Data Driven <span className="text-purple-secondary">Glory</span>
+          </p>
         </header>
 
-        {/* Centralized Sport Selection */}
-        <div className="flex justify-center mb-7 sm:mb-8">
-          <div className={`inline-flex p-2 rounded-[1.2rem] border shadow-[0_0_50px_rgba(0,0,0,0.2)] backdrop-blur-2xl ${mode === 'night' ? 'bg-[#1a2a3d]/80 border-[#4a5f77]' : 'bg-white/65 border-[#c5d8e8]'}`}>
-            {SPORTS.map(s => (
-              <button
-                key={s.id}
-                disabled={!s.active}
-                onClick={() => setSport(s.id)}
-                className={`relative px-5 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-black tracking-[0.15em] uppercase rounded-xl transition-all duration-500 overflow-hidden ${
-                  sport === s.id 
-                    ? mode === 'night'
-                      ? 'text-[#dbe4ee] shadow-[0_20px_50px_rgba(141,198,255,0.35)] bg-[#2f4f73] z-10'
-                      : 'text-white shadow-[0_20px_50px_rgba(32,157,215,0.4)] bg-blue-primary z-10'
-                    : s.active
-                      ? mode === 'night'
-                        ? 'text-[#95a5b8] hover:text-[#dbe4ee] hover:bg-[#263b55]'
-                        : 'text-[#5b6a7e] hover:text-[#032147] hover:bg-[#e8f2f8]'
-                      : 'text-gray-600/30 cursor-not-allowed hidden md:block'
-                }`}
-              >
-                {s.name}
-              </button>
-            ))}
-          </div>
+        <div className="flex justify-center mb-4 sm:mb-5">
+          <SegmentedToggle options={SPORTS} value={sport} onChange={setSport} mode={mode} />
         </div>
 
-        {/* Modern Custom Athlete Selection */}
-        <div className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-8 items-start justify-between mb-6">
-           <CustomSelect 
-             label="Competitor A" 
-             options={F1_ATHLETES} 
-             value={athleteA} 
-             onChange={setAthleteA} 
-             focusColor="blue"
-             disabledOptionIds={[athleteB]}
-             mode={mode}
-           />
-           
-           <div className="hidden lg:flex w-12 shrink-0 h-20 items-center justify-center">
-             {/* Invisible spacer for desktop */}
-           </div>
+        {availableEntityTypes.length > 1 && (
+          <div className="flex justify-center mb-7 sm:mb-8">
+            <SegmentedToggle
+              options={ENTITY_TYPE_OPTIONS.filter((option) => availableEntityTypes.includes(option.id))}
+              value={entityType}
+              onChange={setEntityType}
+              mode={mode}
+              className="scale-[0.92] sm:scale-100"
+            />
+          </div>
+        )}
 
-           <CustomSelect 
-             label="Competitor B" 
-             options={F1_ATHLETES} 
-             value={athleteB} 
-             onChange={setAthleteB} 
-             focusColor="purple"
-             disabledOptionIds={[athleteA]}
-             mode={mode}
-           />
+        <div className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-8 items-start justify-between mb-6">
+          <CustomSelect
+            label={entityType === 'teams' ? 'Team A' : 'Competitor A'}
+            options={selectorOptions}
+            value={entityA}
+            onChange={setEntityA}
+            focusColor="blue"
+            disabledOptionIds={[entityB]}
+            mode={mode}
+          />
+
+          <div className="hidden lg:flex w-12 shrink-0 h-20 items-center justify-center" />
+
+          <CustomSelect
+            label={entityType === 'teams' ? 'Team B' : 'Competitor B'}
+            options={selectorOptions}
+            value={entityB}
+            onChange={setEntityB}
+            focusColor="purple"
+            disabledOptionIds={[entityA]}
+            mode={mode}
+          />
         </div>
 
         <div className="min-h-[300px]">
           {loading ? (
             <div className="flex flex-col items-center justify-center h-full py-60 space-y-12">
               <div className="relative w-32 h-32 sm:w-48 sm:h-48">
-                <div className="absolute inset-0 rounded-full border-t-8 border-r-8 border-blue-primary animate-spin opacity-90 drop-shadow-[0_0_20px_rgba(32,157,215,0.6)]"></div>
-                <div className="absolute inset-4 rounded-full border-b-8 border-l-8 border-purple-secondary animate-[spin_1.2s_linear_infinite_reverse] opacity-90 drop-shadow-[0_0_20px_rgba(117,57,145,0.6)]"></div>
-                <div className={`absolute inset-8 rounded-full border-t-8 border-r-8 animate-[spin_1.8s_linear_infinite] ${mode === 'night' ? 'border-[#7f93a8] drop-shadow-[0_0_20px_rgba(127,147,168,0.55)]' : 'border-[#4f97cc] drop-shadow-[0_0_20px_rgba(79,151,204,0.45)]'}`}></div>
+                <div className="absolute inset-0 rounded-full border-t-8 border-r-8 border-blue-primary animate-spin opacity-90 drop-shadow-[0_0_20px_rgba(32,157,215,0.6)]" />
+                <div className="absolute inset-4 rounded-full border-b-8 border-l-8 border-purple-secondary animate-[spin_1.2s_linear_infinite_reverse] opacity-90 drop-shadow-[0_0_20px_rgba(117,57,145,0.6)]" />
+                <div className={`absolute inset-8 rounded-full border-t-8 border-r-8 animate-[spin_1.8s_linear_infinite] ${mode === 'night' ? 'border-[#7f93a8] drop-shadow-[0_0_20px_rgba(127,147,168,0.55)]' : 'border-[#4f97cc] drop-shadow-[0_0_20px_rgba(79,151,204,0.45)]'}`} />
               </div>
-              <p className={`font-black tracking-[0.4em] text-xl sm:text-2xl uppercase animate-pulse ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#032147]'}`}>Running Calculations</p>
+              <p className={`font-black tracking-[0.4em] text-xl sm:text-2xl uppercase animate-pulse ${mode === 'night' ? 'text-night-text' : 'text-[#032147]'}`}>
+                Running Calculations
+              </p>
             </div>
           ) : (
             <ComparisonCard data={data} mode={mode} pointsView={pointsView} onPointsViewChange={setPointsView} />
