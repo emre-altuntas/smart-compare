@@ -133,16 +133,16 @@ Expand to two more sports. No external APIs or scraping — all data is pre-buil
 Make the app feel complete with search, loading states, and error handling.
 
 ### Backend
-- [ ] `GET /api/athletes?sport={sport}&q={query}` — search endpoint, returns matching slugs and display names
-- [ ] `GET /api/teams?sport={sport}&q={query}` — same for teams
-- [ ] Results limited to 10, case-insensitive match
-- [ ] Search works across both cached F1 data and static dummy data files
+- [x] `GET /api/athletes?sport={sport}&q={query}` — search endpoint, returns matching slugs and display names
+- [x] `GET /api/teams?sport={sport}&q={query}` — same for teams
+- [x] Results limited to 10, case-insensitive match
+- [x] Search works across both cached F1 data and static dummy data files
 
 ### Frontend
-- [ ] Replace dropdowns with searchable autocomplete inputs
-- [ ] Loading skeleton shown while comparison data is fetching
-- [ ] Error state: "Could not load data for {athlete}" with retry button
-- [ ] Empty state on first load: show default comparison (Hamilton vs Verstappen) automatically
+- [x] Replace dropdowns with searchable autocomplete inputs
+- [x] Loading skeleton shown while comparison data is fetching
+- [x] Error state: "Could not load data for {athlete}" with retry button
+- [x] Empty state on first load: show default comparison (Hamilton vs Verstappen) automatically
 - [x] Add Morning/Night mode toggle with small Sun/Moon icon switch at top-right corner
 - [x] Persist theme preference in browser storage
 - [x] Use softer night palette (avoid pure white text and avoid yellow in night mode)
@@ -150,13 +150,13 @@ Make the app feel complete with search, loading states, and error handling.
 - [x] Add a raw vs today-adjusted F1 points toggle for cross-era comparison context
 - [x] Refine SmartCompare title colors to better fit both themes
 - [x] Replace morning yellow highlight with a cooler blue highlight for better visual consistency
-- [ ] No emojis anywhere in UI copy
-- [ ] All brand colors used consistently — no hardcoded colors outside Tailwind config
+- [x] No emojis anywhere in UI copy
+- [x] All brand colors used consistently — no hardcoded colors outside Tailwind config
 
 ### Final Checks
-- [ ] App works fully offline if cache files exist
-- [ ] No auth, no paid APIs, no external sports API dependencies
-- [ ] README updated: setup instructions only, minimal, no emojis
+- [x] App works fully offline if cache files exist
+- [x] No auth, no paid APIs, no external sports API dependencies
+- [x] README updated: setup instructions only, minimal, no emojis
 
 ### Tests & Success Criteria
 - Search returns relevant results for partial name matches
@@ -220,3 +220,4 @@ Make the app feel complete with search, loading states, and error handling.
 | Morning Accent   | `#7aa8cc` | Secondary morning glow/accent          |
 | Gray Text        | `#888888` | Labels, secondary text                 |
 | Loser Fade       | —         | Same color at 35% opacity, never gray  |
+

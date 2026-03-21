@@ -148,3 +148,34 @@ F1_STATS = [
     {"key": "total_points", "label": "Total Points", "adjusted_key": "adjusted_total_points"},
     {"key": "championships", "label": "Championships"},
 ]
+
+
+def list_f1_athletes():
+    seen_slugs = set()
+    athletes = []
+
+    for slug, payload in LEGEND_FALLBACKS.items():
+        if slug in {"max_verstappen", "michael_schumacher"}:
+            continue
+        if slug in seen_slugs:
+            continue
+        seen_slugs.add(slug)
+        athletes.append({"slug": slug, "name": payload["name"]})
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    for cache_file in CACHE_DIR.glob("*.json"):
+        slug = cache_file.stem
+        if slug in seen_slugs:
+            continue
+        try:
+            with open(cache_file, "r", encoding="utf-8") as file:
+                payload = json.load(file)
+        except Exception:
+            continue
+        if not payload.get("name"):
+            continue
+        seen_slugs.add(slug)
+        athletes.append({"slug": slug, "name": payload["name"]})
+
+    athletes.sort(key=lambda athlete: athlete["name"])
+    return athletes
