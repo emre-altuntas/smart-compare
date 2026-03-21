@@ -8,6 +8,8 @@ This project is building a smart compare web app. Key features:
 - Stats should cover the most important metrics — for F1: podiums, poles, wins, fastest laps, championships, and total points.
 - If one athlete leads in certain stats (e.g. podiums and poles), those winning stats should appear visually prominent, while the stats they trail in should appear faded.
 - The UI should support both Morning and Night modes, with a simple user toggle and consistent brand styling in both modes.
+- For F1 total points, do not use an info icon. Instead, place a small modern inline toggle in the points row that switches the label between `Total Points` and `Adjusted Total Points`.
+- F1 points must support a simple toggle between raw career totals and a "today adjusted" view for cross-era context. For now this can be hardcoded local data, with Michael Schumacher adjusted to 3961 points and current-era drivers unchanged.
 
 ## Default Data Strategy
 
@@ -53,7 +55,8 @@ This project is building a smart compare web app. Key features:
 -Night Border:       #4a5f77   → night borders/dividers
 -Night Text:         #dbe4ee   → comfortable night text (not pure white)
 -Night Winner:       #7fc8ff   → winner highlight in night mode (no yellow)
--Morning Winner:     #ecad0a   → winner highlight in morning mode
+-Morning Winner:     #3f8fd0   → winner highlight in morning mode (fits morning UI)
+-Morning Accent:     #7aa8cc   → secondary morning glow/accent
 -Muted Gray:         #888888   → label, secondary text
 
 ## Coding standards

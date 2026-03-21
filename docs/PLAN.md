@@ -76,11 +76,16 @@ Implement the first working sport: F1 athlete comparison using hardcoded local J
   - Winner value: full opacity + `#ecad0a` highlight
   - Loser value: 35% opacity, same color family
 - [x] Wire up to `/api/compare/athletes` endpoint
+- [x] Replace the F1 points info button with a small inline toggle inside the points row
+- [x] Switch the row label between `Total Points` and `Adjusted Total Points` when the toggle changes
+- [x] Add a raw vs today-adjusted F1 points toggle in the comparison UI
 
 ### Tests & Success Criteria
 - `GET /api/compare/athletes?sport=f1&a=hamilton&b=verstappen` returns correct stat structure
 - Comparison card renders with correct winner/loser highlighting
 - Default athletes load from local hardcoded/cache data only
+- F1 points row uses an inline toggle instead of an info tooltip
+- Adjusted points mode shows Schumacher at `3961.0` points and leaves current-era default drivers unchanged
 - No console errors
 
 **Stop here. Demo the F1 comparison and wait for approval.**
@@ -141,6 +146,10 @@ Make the app feel complete with search, loading states, and error handling.
 - [x] Add Morning/Night mode toggle with small Sun/Moon icon switch at top-right corner
 - [x] Persist theme preference in browser storage
 - [x] Use softer night palette (avoid pure white text and avoid yellow in night mode)
+- [x] Replace the F1 points info icon/tooltip with an inline points toggle in the stat row
+- [x] Add a raw vs today-adjusted F1 points toggle for cross-era comparison context
+- [x] Refine SmartCompare title colors to better fit both themes
+- [x] Replace morning yellow highlight with a cooler blue highlight for better visual consistency
 - [ ] No emojis anywhere in UI copy
 - [ ] All brand colors used consistently — no hardcoded colors outside Tailwind config
 
@@ -155,6 +164,9 @@ Make the app feel complete with search, loading states, and error handling.
 - Default comparison loads on first visit with no user interaction
 - Morning/Night toggle (Sun/Moon icon) switches global theme instantly and persists after page refresh
 - Night mode uses eye-comfortable off-white text and non-yellow winner highlighting
+- Total points row can switch inline between raw totals and adjusted totals
+- F1 total points can switch between raw totals and today-adjusted contextual totals
+- Morning mode winner highlight and logo treatment visually fit the rest of the UI
 - Full manual walkthrough passes: F1, Football players, Football teams, Basketball
 
 **Stop here. Final review with user before considering the project complete.**
@@ -204,6 +216,7 @@ Make the app feel complete with search, loading states, and error handling.
 | Night Border     | `#4a5f77` | Night mode borders/dividers            |
 | Night Text       | `#dbe4ee` | Night mode text (not pure white)       |
 | Night Winner     | `#7fc8ff` | Winner highlight in night mode         |
-| Morning Winner   | `#ecad0a` | Winner highlight in morning mode       |
+| Morning Winner   | `#3f8fd0` | Winner highlight in morning mode       |
+| Morning Accent   | `#7aa8cc` | Secondary morning glow/accent          |
 | Gray Text        | `#888888` | Labels, secondary text                 |
 | Loser Fade       | —         | Same color at 35% opacity, never gray  |

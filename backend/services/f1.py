@@ -18,17 +18,17 @@ LEGEND_FALLBACKS = {
     "hamilton": {
         "name": "Lewis Hamilton", "birth_date": "1985-01-07",
         "wins": 105, "podiums": 203, "poles": 117, "fastest_laps": 68,
-        "championships": 7, "total_points": 4863.5
+        "championships": 7, "total_points": 4863.5, "adjusted_total_points": 4863.5
     },
     "michael_schumacher": {
         "name": "Michael Schumacher", "birth_date": "1969-01-03",
         "wins": 91, "podiums": 155, "poles": 68, "fastest_laps": 77,
-        "championships": 7, "total_points": 1566.0
+        "championships": 7, "total_points": 1566.0, "adjusted_total_points": 3961.0
     },
     "max_verstappen": {
         "name": "Max Verstappen", "birth_date": "1997-09-30",
         "wins": 71, "podiums": 127, "poles": 62, "fastest_laps": 37,
-        "championships": 4, "total_points": 3154.5
+        "championships": 4, "total_points": 3154.5, "adjusted_total_points": 3154.5
     }
 }
 # map the short slugs correctly too
@@ -111,7 +111,8 @@ async def fetch_f1_data(slug):
             "poles": poles,
             "fastest_laps": fastest_laps,
             "championships": championships,
-            "total_points": round(total_points, 1)
+            "total_points": round(total_points, 1),
+            "adjusted_total_points": round(total_points, 1)
         }
 
 async def get_f1_athlete(slug):
@@ -137,4 +138,3 @@ async def get_f1_athlete(slug):
             json.dump(data, f)
             
     return data
-

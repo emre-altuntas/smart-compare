@@ -67,36 +67,61 @@ function CustomSelect({ options, value, onChange, label, focusColor, disabledOpt
   )
 }
 
-function StatRow({ label, valA, valB, mode }) {
+function PointsLabel({ mode, pointsView, onToggle }) {
+  const isAdjusted = pointsView === 'adjusted'
+
+  return (
+    <div className="flex items-center justify-center gap-2 sm:gap-3">
+      <span className="leading-tight tracking-[0.08em] sm:tracking-[0.14em]">
+        {isAdjusted ? 'Adjusted Total Points' : 'Total Points'}
+      </span>
+      <button
+        type="button"
+        aria-label={isAdjusted ? 'Show raw total points' : 'Show adjusted total points'}
+        aria-pressed={isAdjusted}
+        onClick={onToggle}
+        className={`relative h-5 w-9 sm:h-6 sm:w-10 shrink-0 rounded-full border transition-all duration-300 ${isAdjusted ? 'bg-blue-primary border-blue-primary' : mode === 'night' ? 'bg-[#203244] border-[#4a5f77]' : 'bg-[#d8e7f2] border-[#b9d3e3]'}`}
+      >
+        <span
+          className={`absolute top-[1px] left-[1px] h-4 w-4 sm:h-[18px] sm:w-[18px] rounded-full bg-white shadow-[0_4px_12px_rgba(3,33,71,0.22)] transition-transform duration-300 ${isAdjusted ? 'translate-x-4 sm:translate-x-[1.05rem]' : 'translate-x-0'}`}
+        />
+      </button>
+    </div>
+  )
+}
+
+function StatRow({ label, valA, valB, mode, pointsView = 'raw', onPointsToggle = null, sideWidthClass = 'w-2/5', centerWidthClass = 'w-1/5' }) {
   const numA = parseFloat(valA) || 0
   const numB = parseFloat(valB) || 0
   const winA = numA > numB
   const winB = numB > numA
   const winnerClass = mode === 'night'
     ? 'text-[#7fc8ff] opacity-100 drop-shadow-[0_0_16px_rgba(127,200,255,0.45)] scale-[1.02]'
-    : 'text-accent-yellow opacity-100 drop-shadow-[0_0_20px_rgba(236,173,10,0.6)] scale-[1.02]'
-  const loserClass = mode === 'night' ? 'text-[#7fc8ff]/35 scale-95' : 'text-accent-yellow/35 scale-95'
-  
+    : 'text-[#3f8fd0] opacity-100 drop-shadow-[0_0_20px_rgba(63,143,208,0.35)] scale-[1.02]'
+  const loserClass = mode === 'night' ? 'text-[#7fc8ff]/35 scale-95' : 'text-[#3f8fd0]/35 scale-95'
+
   return (
     <div className={`flex justify-between items-center py-3 sm:py-4 border-b last:border-0 transition-colors rounded-xl px-2 sm:px-5 -mx-2 sm:-mx-5 group ${mode === 'night' ? 'border-white/10 hover:bg-white/[0.03]' : 'border-[#d8e6f1] hover:bg-[#f4f9fc]'}`}>
-      <div className={`w-2/5 text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${winA ? winnerClass : loserClass}`}>
+      <div className={`${sideWidthClass} text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${winA ? winnerClass : loserClass}`}>
         {valA}
       </div>
-      <div className="w-1/5 flex items-center justify-center">
-        <div className={`text-center text-[9px] sm:text-[10px] lg:text-xs font-black tracking-[0.12em] sm:tracking-[0.2em] uppercase transition-colors leading-tight ${mode === 'night' ? 'text-[#8ea1b6] group-hover:text-[#dbe4ee]' : 'text-[#6e7f95] group-hover:text-[#032147]'}`}>
-          {label}
+      <div className={`${centerWidthClass} flex items-center justify-center`}>
+        <div className={`relative flex items-center justify-center gap-1 text-center text-[9px] sm:text-[10px] lg:text-xs font-black tracking-[0.12em] sm:tracking-[0.2em] uppercase transition-colors leading-tight ${mode === 'night' ? 'text-[#8ea1b6] group-hover:text-[#dbe4ee]' : 'text-[#6e7f95] group-hover:text-[#032147]'}`}>
+          {onPointsToggle ? <PointsLabel mode={mode} pointsView={pointsView} onToggle={onPointsToggle} /> : label}
         </div>
       </div>
-      <div className={`w-2/5 text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${winB ? winnerClass : loserClass}`}>
+      <div className={`${sideWidthClass} text-center text-2xl sm:text-4xl lg:text-5xl font-black tabular-nums transition-all duration-500 tracking-tight ${winB ? winnerClass : loserClass}`}>
         {valB}
       </div>
     </div>
   )
 }
 
-function ComparisonCard({ data, mode }) {
+function ComparisonCard({ data, mode, pointsView, onPointsViewChange }) {
   if (!data || !data.a || !data.b) return null;
   const { a, b } = data;
+  const pointKey = pointsView === 'adjusted' ? 'adjusted_total_points' : 'total_points'
+
   return (
     <div className={`w-full max-w-5xl mx-auto rounded-[1.5rem] sm:rounded-[2rem] border p-4 sm:p-6 lg:p-8 shadow-[0_0_80px_-30px_rgba(32,157,215,0.25)] backdrop-blur-3xl mt-6 relative overflow-hidden ${mode === 'night' ? 'border-[#4a5f77] bg-[#152334]/85' : 'border-[#8dc4df] bg-white/75'}`}>
       
@@ -117,7 +142,16 @@ function ComparisonCard({ data, mode }) {
         <StatRow label="Podiums" valA={a.podiums} valB={b.podiums} mode={mode} />
         <StatRow label="Poles" valA={a.poles} valB={b.poles} mode={mode} />
         <StatRow label="Fastest Laps" valA={a.fastest_laps} valB={b.fastest_laps} mode={mode} />
-        <StatRow label="Total Points" valA={a.total_points} valB={b.total_points} mode={mode} />
+        <StatRow
+          label="Total Points"
+          valA={a[pointKey]}
+          valB={b[pointKey]}
+          mode={mode}
+          pointsView={pointsView}
+          onPointsToggle={() => onPointsViewChange(pointsView === 'adjusted' ? 'raw' : 'adjusted')}
+          sideWidthClass="w-[35%] sm:w-[38%]"
+          centerWidthClass="w-[30%] sm:w-[24%]"
+        />
         <StatRow label="Championships" valA={a.championships} valB={b.championships} mode={mode} />
       </div>
     </div>
@@ -129,6 +163,7 @@ function App() {
   const [athleteA, setAthleteA] = useState('verstappen')
   const [athleteB, setAthleteB] = useState('schumacher')
   const [mode, setMode] = useState('night')
+  const [pointsView, setPointsView] = useState('raw')
   
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -164,7 +199,7 @@ function App() {
     <div className={`min-h-screen py-6 sm:py-8 px-4 sm:px-6 lg:px-10 font-sans antialiased selection:bg-blue-primary/30 relative overflow-hidden transition-colors duration-500 ${mode === 'night' ? 'text-[#dbe4ee] bg-[#0b1624]' : 'text-[#032147] bg-[#eef7fc]'}`}>
       {/* Background ambient lighting */}
       <div className={`fixed top-[-20%] left-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#365b85]/25' : 'bg-blue-primary/20'}`}></div>
-      <div className={`fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#5f4c78]/25' : 'bg-accent-yellow/20'}`}></div>
+      <div className={`fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] blur-[200px] rounded-full pointer-events-none ${mode === 'night' ? 'bg-[#5f4c78]/25' : 'bg-[#7aa8cc]/25'}`}></div>
 
       <button
         type="button"
@@ -194,10 +229,10 @@ function App() {
       <div className="w-full max-w-6xl mx-auto relative z-10">
         <header className="text-center mb-8 sm:mb-10 flex flex-col items-center mt-2">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-3">
-            <span className={`bg-gradient-to-r bg-clip-text text-transparent drop-shadow-[0_0_28px_rgba(32,157,215,0.35)] animate-pulse ${mode === 'night' ? 'from-[#dbe4ee] via-[#8dc6ff] to-[#b59ad1]' : 'from-[#032147] via-blue-primary to-purple-secondary'}`}>
+            <span className={`bg-gradient-to-r bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(32,157,215,0.28)] ${mode === 'night' ? 'from-[#c8d7e8] via-[#8db8dd] to-[#9caec1]' : 'from-[#24405f] via-[#2e709f] to-[#4f83ad]'}`}>
               SMART
             </span>
-            <span className={`ml-2 sm:ml-3 ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#032147]'}`}>COMPARE</span>
+            <span className={`ml-2 sm:ml-3 ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#24405f]'}`}>COMPARE</span>
           </h1>
           <p className={`text-xs sm:text-sm font-black tracking-[0.18em] uppercase opacity-80 ${mode === 'night' ? 'text-[#95a5b8]' : 'text-[#60758e]'}`}>Data Driven <span className="text-purple-secondary">Glory</span></p>
         </header>
@@ -261,12 +296,12 @@ function App() {
               <div className="relative w-32 h-32 sm:w-48 sm:h-48">
                 <div className="absolute inset-0 rounded-full border-t-8 border-r-8 border-blue-primary animate-spin opacity-90 drop-shadow-[0_0_20px_rgba(32,157,215,0.6)]"></div>
                 <div className="absolute inset-4 rounded-full border-b-8 border-l-8 border-purple-secondary animate-[spin_1.2s_linear_infinite_reverse] opacity-90 drop-shadow-[0_0_20px_rgba(117,57,145,0.6)]"></div>
-                <div className={`absolute inset-8 rounded-full border-t-8 border-r-8 animate-[spin_1.8s_linear_infinite] ${mode === 'night' ? 'border-[#7f93a8] drop-shadow-[0_0_20px_rgba(127,147,168,0.55)]' : 'border-accent-yellow drop-shadow-[0_0_20px_rgba(236,173,10,0.6)]'}`}></div>
+                <div className={`absolute inset-8 rounded-full border-t-8 border-r-8 animate-[spin_1.8s_linear_infinite] ${mode === 'night' ? 'border-[#7f93a8] drop-shadow-[0_0_20px_rgba(127,147,168,0.55)]' : 'border-[#4f97cc] drop-shadow-[0_0_20px_rgba(79,151,204,0.45)]'}`}></div>
               </div>
               <p className={`font-black tracking-[0.4em] text-xl sm:text-2xl uppercase animate-pulse ${mode === 'night' ? 'text-[#dbe4ee]' : 'text-[#032147]'}`}>Running Calculations</p>
             </div>
           ) : (
-            <ComparisonCard data={data} mode={mode} />
+            <ComparisonCard data={data} mode={mode} pointsView={pointsView} onPointsViewChange={setPointsView} />
           )}
         </div>
       </div>
@@ -275,4 +310,3 @@ function App() {
 }
 
 export default App
-
