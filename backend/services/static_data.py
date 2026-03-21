@@ -40,13 +40,25 @@ def _find_by_slug(entries, slug: str):
     return next((entry for entry in entries if entry["slug"] == slug), None)
 
 
+def get_football_players():
+    return _load_json("football_players.json")
+
+
+def get_football_teams():
+    return _load_json("football_teams.json")
+
+
+def get_basketball_athletes():
+    return _load_json("basketball.json")
+
+
 def get_football_player(slug: str):
-    return _find_by_slug(_load_json("football_players.json"), slug)
+    return _find_by_slug(get_football_players(), slug)
 
 
 def get_football_team(slug: str):
-    return _find_by_slug(_load_json("football_teams.json"), slug)
+    return _find_by_slug(get_football_teams(), slug)
 
 
 def get_basketball_athlete(slug: str):
-    return _find_by_slug(_load_json("basketball.json"), slug)
+    return _find_by_slug(get_basketball_athletes(), slug)
